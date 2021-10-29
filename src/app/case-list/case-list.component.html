@@ -1,39 +1,5 @@
-<p-table #pendingCases [columns]="cols" [value]="pendingCasesList" [autoLayout]="true" [contextMenu]="cm"
-  [scrollable]="true" scrollHeight="35vw"
-  [(contextMenuSelection)]="selection" selectionMode="multiple"  [(selection)]="selectedCases" dataKey="accessionNo"
-  (onRowSelect)="rowSelected($event)" (onRowUnselect)="rowUnselected($event)" stateKey="pendingCases" stateStorage="local"
-  [exportFilename]="pendingExportFileName" [style]="{'min-height': '40vw', 'min-width': '65vw'}">
-  <ng-template pTemplate="caption">
-    <div class="grid">
-      <div class="col-9">
-        <div style="text-align: left">
-          <i class="pi pi-search" style="margin:4px 4px"></i>
-          <span class="p-input-icon-right">
-            <i class="pi pi-times" (click)="fi.value = '';applyGlobalFilter($event, 'contains');fi.focus();"></i>
-            <input type="text" #fi pInputText size="50" placeholder="Filter" (input)="applyGlobalFilter($event, 'contains')" style="width:auto">
-          </span>
-          <button type="button" pButton icon="pi pi-ban" title="Clear filters and sorts"
-            (click)="fi.value = '';applyGlobalFilter($event, 'contains');clearFilter(pendingCases)"></button>
-        </div>
-      </div>
-      <div class="col-1">
-        <p-progressSpinner *ngIf="pendingCasesLoading" [style]="{width: '25px', height: '23px'}" strokeWidth="8" animationDuration=".75s">
-        </p-progressSpinner>
-      </div>
-      <div class="col-1">
-        <div class="p-helper-clearfix" style="text-align: left">
-          <button type="button" pButton icon="pi pi-refresh" iconPos="left" label="Refresh" (click)="onRefresh()"
-            style="margin-right: 0.5em;" [disabled]="pendingCasesLoading"></button>
-        </div>
-      </div>
-      <div class="col-1">
-        <div class="p-helper-clearfix" style="text-align: left">
-          <button type="button" pButton icon="pi pi-file-o" iconPos="left" label="Export" (click)="pendingCases.exportCSV()"
-            style="margin-right: 0.5em; margin-bottom: 0.5em;" [disabled]="pendingCasesLoading"></button>
-        </div>
-      </div>
-    </div>
-  </ng-template>
+<p-table #pendingCases [columns]="cols" [value]="pendingCasesList" [autoLayout]="true"
+  [scrollable]="true" scrollHeight="35vw" stateKey="pendingCases" stateStorage="local">
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th style="flex: 0 0 3%">
@@ -43,17 +9,6 @@
         <div class="p-d-flex p-ai-center p-jc-between">
           {{col.header}}
         <p-sortIcon [field]="col.field" style="font-size: .7em; margin-right: 10px;"></p-sortIcon>
-        <p-columnFilter *ngIf="col.filterField" [field]="col.filterField" matchMode="in" operator="or" display="menu" class="p-ml-auto" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
-          <ng-template pTemplate="header">
-            <div style="margin-top: 5px; margin-left: 7px;">
-                <span style="font-weight: bolder;">Site Code</span>
-            </div>
-          </ng-template>
-          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-            <p-multiSelect [ngModel]="value" [options]="siteCodes" placeholder="Any" (onChange)="filter($event.value)" >
-            </p-multiSelect>
-          </ng-template>
-        </p-columnFilter>
       </div>
       </th>
     </tr>
@@ -61,28 +16,10 @@
   <ng-template pTemplate="body" let-res let-rowData let-columns="columns" let-rowIndex="rowIndex">
     <tr [pContextMenuRow]="rowData" [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
       <td style="flex: 0 0 3%">
-        <i [ngClass]="rowData?.notes?.length === 1 ? 'pi pi-comment' : 'pi pi-comments'" *ngIf="rowData?.notes?.length"
-          [pTooltip]="rowData?.notes?.length + ' note(s)'" (click)="addNote.emit(rowData)"></i>
-        <i class="pi pi-plus" *ngIf="!rowData?.notes?.length" pTooltip="Add note..." (click)="addNote.emit(rowData)"></i>
       </td>
       <td *ngFor="let col of columns" [style.flex]="col?.width">
-        <span *ngIf="col.field.includes('accessionNo')" [ngStyle]="rowData?.message?.length ? {'text-decoration':'underline'} : {}"
-          [pTooltip]="rowData?.message">
-          {{rowData[col.field]}}
-        </span>
-        <span *ngIf="col.header.includes('Date')">
-          {{rowData[col.field] | date : col.format}}
-        </span>
-        <span *ngIf="!col.header.includes('Date') && !col.field.includes('accessionNo')"
-          [pTooltip]="rowData[col.tooltipField]" [ngStyle]="rowData[col.tooltipField] ? {'text-decoration':'underline'} : {}">
-          {{rowData[col.field]}}
-        </span>
+        {{rowData[col.field]}}
       </td>
     </tr>
   </ng-template>
 </p-table>
-<p-contextMenu #cm [model]="menuItems" appendTo="body"></p-contextMenu>
-
-<p-dialog [header]="accInfoHeader" [(visible)]="displayInfo" [modal]="true" [style]="{'min-width': '70vw', 'min-height': '25vw'}" [maximizable]="true">
-  Dialog
-</p-dialog>
