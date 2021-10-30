@@ -14,7 +14,6 @@ import { TableModule } from 'primeng/table';
     BrowserModule,
     TableModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

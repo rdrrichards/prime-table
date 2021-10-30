@@ -1,9 +1,9 @@
-<p-table #pendingCases [columns]="cols" [value]="pendingCasesList" [autoLayout]="true"
-  [scrollable]="true" scrollHeight="35vw" stateKey="pendingCases" stateStorage="local">
+<p-table [columns]="cols" [value]="pendingCasesList" [autoLayout]="true"
+  [scrollable]="true" scrollHeight="350px" stateKey="pendingCases" stateStorage="local">
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th style="flex: 0 0 3%">
-        <i class="pi pi-pencil" pTooltip="Notes or Message"></i>
+        <i class="pi pi-pencil"></i>
       </th>
       <th *ngFor="let col of columns" [pSortableColumn]="col.field" [style.flex]="col?.width">
         <div class="p-d-flex p-ai-center p-jc-between">
